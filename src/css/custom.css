@@ -176,3 +176,25 @@ code {
 [data-theme='dark'] code {
   background: transparent !important;
 }
+
+/* Navbar Signup Button */
+.navbar-signup-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff; /* White text */
+  background-color: #6366f1; /* Primary purple color */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  text-decoration: none; /* Remove underline for links */
+}
+
+.navbar-signup-button:hover {
+  background-color: #4f46e5; /* Darker purple on hover */
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); /* Subtle glow */
+}

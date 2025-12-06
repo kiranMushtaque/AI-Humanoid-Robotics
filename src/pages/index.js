@@ -415,8 +415,6 @@ function HeroSection() {
       <div className="container">
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
-          
-
             <h1 className={styles.heroTitle}>
               Master <span className={styles.heroTitleAccent}>Humanoid</span>{" "}
               Robotics
@@ -458,6 +456,7 @@ function HeroSection() {
                   />
                 </svg>
               </Link>
+            
               <Link to="#features" className={styles.btnSecondary}>
                 Explore Features
               </Link>
@@ -638,7 +637,6 @@ function CTASection() {
             <Link to="/docs/intro" className={styles.ctaButton}>
               Start Learning Now
             </Link>
-          
           </div>
         </div>
       </div>

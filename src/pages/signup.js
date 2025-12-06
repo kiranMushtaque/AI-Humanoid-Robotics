@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Layout from '@theme/Layout';
-import SignupComponent from '../components/Signup';
+import SignupComponent from '../components/BetterAuthSignup';
 
 export default function SignupPage() {
   return (

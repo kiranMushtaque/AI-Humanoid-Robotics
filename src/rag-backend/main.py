@@ -1,12 +1,20 @@
 import os
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from qdrant_client import QdrantClient
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from dotenv import load_dotenv
+from sqlalchemy.orm import Session
+from fastapi.staticfiles import StaticFiles # Added
+from starlette.responses import FileResponse # Added
+from pathlib import Path # Added
+
+from database import get_db
+from auth import authenticate_user, create_user, User
+from models import UserCreate, UserLogin
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -119,6 +127,21 @@ Provide a concise, beginner-friendly answer in the same language as the query.
         return generate_fallback_answer(context, query)
 
 # --- API Endpoints ---
+@app.post("/signin")
+def signin(user_login: UserLogin, db: Session = Depends(get_db)):
+    user = authenticate_user(db, user_login.email, user_login.password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    return {"message": "Logged in successfully", "redirect_url": f"/welcome/{user.email}"}
+
+@app.post("/signup")
+def signup(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    create_user(db=db, email=user.email, password=user.password, background=user.background)
+    return {"message": "User created successfully"}
+
 @app.post("/search")
 async def search(search_query: SearchQuery):
     """
@@ -172,3 +195,31 @@ async def search(search_query: SearchQuery):
 @app.get("/")
 def read_root():
     return {"message": "RAG Backend is running."}
+
+# This must come AFTER all API routes
+# Frontend build directory
+FRONTEND_BUILD_DIR = Path(__file__).parent.parent.parent / "build"
+logger.info(f"Resolved FRONTEND_BUILD_DIR: {FRONTEND_BUILD_DIR}")
+logger.info(f"FRONTEND_BUILD_DIR exists: {FRONTEND_BUILD_DIR.exists()}")
+
+if not FRONTEND_BUILD_DIR.exists():
+    logger.error(f"Frontend build directory not found: {FRONTEND_BUILD_DIR}. Ensure 'npm run build' has been executed in the Docusaurus project root.")
+    raise RuntimeError("Docusaurus build directory not found. Please run 'npm run build'.") # Make it explicit
+
+# Mount the entire Docusaurus build directory at the root "/"
+# This serves all static files (JS, CSS, images, etc.) that Docusaurus generates
+# It should be placed before the catch-all for index.html, but after API routes.
+app.mount("/", StaticFiles(directory=FRONTEND_BUILD_DIR), name="docusaurus_static")
+
+# This route specifically serves the root index.html for Docusaurus if app.mount didn't catch it
+# or for dynamic routes.
+# It MUST be placed AFTER app.mount and AFTER all API endpoints.
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    index_file_path = FRONTEND_BUILD_DIR / "index.html"
+    if index_file_path.is_file():
+        return FileResponse(index_file_path)
+    raise HTTPException(status_code=404, detail="Frontend index.html not found in build directory.")
+
+
+

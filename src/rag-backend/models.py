@@ -1,5 +1,4 @@
-
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import List
 
 class ChatRequest(BaseModel):
@@ -12,3 +11,12 @@ class ChatResponse(BaseModel):
 
 class IngestRequest(BaseModel):
     directory: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+    background: str
