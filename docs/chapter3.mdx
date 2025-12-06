@@ -1,0 +1,116 @@
+
+import ConditionalContent from '@site/src/components/ConditionalContent';
+
+# Chapter 3: ROS 2 Fundamentals - Nodes and Topics
+
+## Learning Objectives
+
+- Understand the concept of the ROS 2 graph.
+- Learn how to create and run a ROS 2 node.
+- Implement communication between nodes using topics (publish/subscribe).
+
+:::tip[Simple Explanation: The Postal Service Analogy]
+
+Think of ROS 2 as a postal service for your robot's different parts.
+
+-   **Nodes:** These are like different departments in a company (e.g., the 'Sensor Department', the 'Motor Department'). Each `Node` is a program with a specific job.
+
+-   **Topics:** These are like mail routes or post office boxes. A topic has a name, like `/robot_vision` or `/motor_commands`.
+
+-   **Publishers:** A node can be a `Publisher`, which sends out letters (messages) to a specific topic (mail route). For example, the sensor node publishes camera images to the `/robot_vision` topic.
+
+-   **Subscribers:** A node can also be a `Subscriber`, which signs up to receive all letters sent to a specific topic. The navigation node would subscribe to `/robot_vision` to get the camera images.
+
+So, nodes don't talk to each other directly. They just send (publish) and receive (subscribe) messages from named topics, just like a postal system!
+
+:::
+
+## The ROS 2 Graph
+
+The ROS 2 graph is the network of ROS 2 elements processing data together. The fundamental components are:
+
+-   **Nodes:** The main computational units. Each node should be responsible for a single, module purpose (e.g., controlling a motor, reading a sensor).
+-   **Topics:** A named bus over which nodes exchange messages.
+-   **Messages:** The data structure used for communicating on topics.
+
+<ConditionalContent for="student" type="refresher">
+  A **node** is like a small program. Imagine you have one program for driving, one for reading sensors, and one for navigating. Each of these would be a node. They all run at the same time and talk to each other to make the robot work.
+</ConditionalContent>
+
+<ConditionalContent for="professional" type="deep-dive">
+  Under the hood, ROS 2 nodes are powered by the DDS (Data Distribution Service) middleware. This is what provides the discovery, serialization, and transport mechanisms. You can even configure the underlying DDS implementation (like CycloneDDS or FastDDS) for specific network requirements.
+</ConditionalContent>
+
+## Creating a ROS 2 Node
+
+Let's create a simple "hello world" node in Python.
+
+```python title="~/ros2_ws/src/my_package/my_package/my_node.py"
+import rclpy
+from rclpy.node import Node
+
+class MyNode(Node):
+    def __init__(self):
+        super().__init__('my_node')
+        self.get_logger().info('Hello from my_node!')
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = MyNode()
+    rclpy.spin(node)
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+## Publisher/Subscriber Example
+
+Nodes communicate by publishing messages to topics and subscribing to topics to receive messages.
+
+```python title="Publisher Node"
+from std_msgs.msg import String
+
+class SimplePublisher(Node):
+    def __init__(self):
+        super().__init__('simple_publisher')
+        self.publisher_ = self.create_publisher(String, 'chatter', 10)
+        self.timer = self.create_timer(0.5, self.timer_callback)
+        self.get_logger().info('Publisher is ready.')
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello ROS 2!'
+        self.publisher_.publish(msg)
+        self.get_logger().info(f'Publishing: "{msg.data}"')
+```
+
+```python title="Subscriber Node"
+from std_msgs.msg import String
+
+class SimpleSubscriber(Node):
+    def __init__(self):
+        super().__init__('simple_subscriber')
+        self.subscription = self.create_subscription(
+            String,
+            'chatter',
+            self.listener_callback,
+            10)
+        self.get_logger().info('Subscriber is ready.')
+
+    def listener_callback(self, msg):
+        self.get_logger().info(f'I heard: "{msg.data}"')
+```
+
+## Exercises
+
+1.  Create a ROS 2 package and a node that prints "Hello, [Your Name]!" to the console.
+2.  Create two nodes: one that publishes a random number to a topic called `/random_number`, and another that subscribes to it and prints any number greater than 50.
+3.  Use the `ros2 topic list` and `ros2 topic echo /chatter` commands while your simple publisher and subscriber are running to inspect the topic in real-time.
+
+## Beginner Exercises
+
+1.  In ROS 2, a program responsible for a single purpose is called a <span className="exercise-blank">Node</span>.
+2.  To send a message, a node <span className="exercise-blank">publishes</span> it to a topic.
+3.  To receive a message, a node <span className="exercise-blank">subscribes</span> to a topic.
+4.  The "mail routes" that nodes use to pass messages are called <span className="exercise-blank">topics</span>.

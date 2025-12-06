@@ -1,0 +1,100 @@
+# Chapter 4: ROS 2 Intermediate - Services and Actions
+
+## Learning Objectives
+
+- Understand when to use services for request/response communication.
+- Learn how to use actions for long-running, feedback-driven tasks.
+- Create custom message, service, and action definitions.
+
+:::tip[Simple Explanation: Communication Methods]
+
+If **Topics** are like a radio broadcast (one-to-many, you just send it out), then **Services** and **Actions** are like more direct forms of communication.
+
+-   **Services are like a Phone Call:**
+    -   You (the *client*) "call" another node (the *server*) and ask a direct question (the *request*).
+    -   You then **wait** on the line until you get an answer (the *response*).
+    -   It's a direct, blocking, request-response conversation. Use this for quick tasks like "What's the robot's current position?"
+
+-   **Actions are like Ordering a Pizza:**
+    -   You (the *client*) place an order with a specific *goal* (e.g., "Deliver a large pepperoni pizza to my address").
+    -   You don't just wait by the phone. You can get updates on the progress (the *feedback*), like "The pizza is in the oven" or "The driver is on their way."
+    -   When the task is finally done, you get a final *result* (the pizza arrives!).
+    -   Use this for long-running tasks like "Navigate to the kitchen," where you want to know the progress along the way.
+
+:::
+
+## Services: Request/Response
+
+Services are used for synchronous, two-way communication. A "service client" sends a request to a "service server," which performs a task and sends back a response.
+
+### Example: A Simple Calculator Service
+
+First, define the service in a `.srv` file:
+
+```c title="my_interfaces/srv/AddTwoInts.srv"
+int64 a
+int64 b
+---
+int64 sum
+```
+
+**Service Server Node:**
+
+```python
+from my_interfaces.srv import AddTwoInts
+
+class AddTwoIntsServer(Node):
+    def __init__(self):
+        super().__init__('add_two_ints_server')
+        self.srv = self.create_service(AddTwoInts, 'add_two_ints', self.add_two_ints_callback)
+
+    def add_two_ints_callback(self, request, response):
+        response.sum = request.a + request.b
+        self.get_logger().info(f'Incoming request\na: {request.a} b: {request.b}')
+        return response
+```
+
+**Service Client Node:**
+
+```python
+# ... (imports and boilerplate)
+client = self.create_client(AddTwoInts, 'add_two_ints')
+while not client.wait_for_service(timeout_sec=1.0):
+    self.get_logger().info('service not available, waiting again...')
+request = AddTwoInts.Request()
+request.a = 5
+request.b = 10
+future = client.call_async(request)
+# ... (handle future) 
+```
+
+## Actions: Long-Running Tasks
+
+Actions are for tasks that take a long time to complete and should provide feedback. They consist of three parts: a goal, feedback, and a result.
+
+### Example: A Fibonacci Action
+
+Define the action in a `.action` file:
+
+```c title="my_interfaces/action/Fibonacci.action"
+int32 order
+---
+int32[] sequence
+---
+int32[] partial_sequence
+```
+
+An action server would then execute the goal, publish feedback (the `partial_sequence`) periodically, and finally return the `sequence` as the result.
+
+## Exercises
+
+1.  Create a service that takes a string as input and returns the string in all uppercase.
+2.  Implement the Fibonacci action server and a client to call it.
+3.  Explain the key differences between topics, services, and actions. When would you use each?
+
+## Beginner Exercises
+
+1.  For a quick, synchronous, request/response interaction, you should use a <span className="exercise-blank">Service</span>.
+2.  For a long-running task where you want to get progress updates, you should use an <span className="exercise-blank">Action</span>.
+3.  In a service, the node asking for something is the <span className="exercise-blank">client</span> and the node doing the work is the <span className="exercise-blank">server</span>.
+4.  In an action, the three main parts are the goal, the feedback, and the <span className="exercise-blank">result</span>.

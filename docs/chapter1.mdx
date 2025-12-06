@@ -1,0 +1,71 @@
+
+# Chapter 1: Introduction to Embodied Intelligence
+
+## Learning Objectives
+
+- Understand the definition and core concepts of Embodied AI.
+- Learn about the history and evolution of embodied intelligence.
+- Recognize the importance of the interplay between hardware and software in robotics.
+
+:::tip[Simple Explanation]
+
+Imagine a brain in a jar. It can be very smart, but it can't really *do* anything in the real world. Now, imagine that brain is put inside a robot body with eyes, hands, and legs. This is **Embodied AI**.
+
+-   The robot's **eyes and ears** are its *sensors* (Sense).
+-   Its **brain** is the computer that *processes* what it sees and hears (Think).
+-   Its **hands and legs** are its *actuators* that let it move and interact with things (Act).
+
+Embodied AI is about learning by *doing*, just like how a baby learns to walk by trying, falling, and trying again. It's not just about thinking; it's about connecting thinking to physical action in the real world.
+
+:::
+
+## What is Embodied AI?
+
+Embodied AI refers to intelligent agents that can learn and interact with their environment through a physical body. Unlike disembodied AI like chatbots, embodied agents experience the world directly, enabling them to develop a deeper understanding of physical concepts.
+
+## The Triad of Embodied Intelligence
+
+Embodied Intelligence is often described as a triad of three essential components:
+
+1.  **Sense:** The ability to perceive the environment using sensors (e.g., cameras, LiDAR).
+2.  **Act:** The ability to perform actions and affect the environment (e.g., moving a robotic arm).
+3.  **Think:** The ability to process information, learn from experience, and make decisions.
+
+```python title="Simplified Embodied AI Logic"
+class EmbodiedAgent:
+    def __init__(self):
+        self.sensors = ["camera", "touch_sensor"]
+        self.actuators = ["wheels", "gripper"]
+
+    def sense(self):
+        # Read data from sensors
+        return {"image": "...", "touch": "..."}
+
+    def think(self, sensor_data):
+        # Process data and decide on an action
+        if "obstacle" in sensor_data["image"]:
+            return "turn_left"
+        return "move_forward"
+
+    def act(self, action):
+        # Execute the action
+        print(f"Executing action: {action}")
+
+    def run_loop(self):
+        while True:
+            data = self.sense()
+            action = self.think(data)
+            self.act(action)
+```
+
+## Exercises
+
+1.  Research and write a short paragraph about a real-world example of an embodied AI system (e.g., a self-driving car or a warehouse robot).
+2.  Modify the `think` method in the Python example to handle a new sensor, like a sound sensor that detects a keyword.
+3.  In your own words, explain why a physical body is important for learning a task like cleaning a room.
+
+## Beginner Exercises
+
+1.  An AI that only exists on a computer, like a chatbot, is called a <span className="exercise-blank">disembodied</span> AI.
+2.  The three parts of the Triad of Embodied Intelligence are <span className="exercise-blank">Sense</span>, <span className="exercise-blank">Think</span>, and <span className="exercise-blank">Act</span>.
+3.  A robot's camera is an example of a <span className="exercise-blank">sensor</span>.

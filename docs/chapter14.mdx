@@ -1,0 +1,96 @@
+
+# Chapter 14: Capstone Project Part 2 - Deployment and Demonstration
+
+## Learning Objectives
+
+- Deploy the integrated "go-and-fetch" system onto a real or simulated robot.
+- Learn strategies for testing and debugging a complex robotics system.
+- Prepare for a final project demonstration.
+
+:::tip[Simple Explanation: Showtime!]
+
+It's time to bring it all together and show off what our robot can do! This final part of the project is about deploying, testing, and demonstrating our complete system.
+
+-   **Deployment is "Moving In":** **Deploying** is the process of moving our finished code from our development computer onto the robot's actual on-board computer (like the Jetson Orin). It's like an app developer finally publishing their app to the app store. We need to make sure all the code is in one place and that we have a "master" launch file that can start all our nodes in the correct order.
+
+-   **Debugging is Detective Work:** In a complex system with many nodes talking to each other, things will inevitably go wrong. **Debugging** is the detective work of figuring out *why*.
+    -   Did the voice command get transcribed correctly?
+    -   Did the navigator receive the correct goal?
+    -   Is the camera publishing images?
+    -   We'll use tools like **RViz2** to *see* what the robot is thinking and `ros2 doctor` to get a health check on our system.
+
+-   **Demonstration is the Performance:** This is where you get to show what you've built. A live demo is exciting, but because robotics can be unpredictable, it's always a smart idea to have a backup video of a successful run, just in case!
+
+This chapter is about the final, practical steps of making a robot work and proving that it does. Congratulations on reaching the final stage!
+
+:::
+
+## Deploying the Full System
+
+This is the final step: bringing everything together on the target platform (ideally a Unitree H1 robot on a Jetson Orin, or a simulated equivalent in Isaac Sim).
+
+**Deployment Checklist:**
+1.  **Code Repository:** Ensure all your packages are in a single repository and can be built cleanly with `colcon build`.
+2.  **Launch Files:** Create a master launch file that starts all the necessary nodes in the correct order:
+    -   Robot drivers (or simulation environment).
+    -   Nav2 stack.
+    -   Your custom nodes (`voice_command`, `command_parser`, `vla_recognizer`).
+3.  **Configuration:** Double-check all your configuration files (`nav2_params.yaml`, model paths, etc.).
+4.  **Hardware:** Make sure all hardware (camera, LiDAR, Jetson) is connected and powered correctly.
+
+```python title="master_launch.py (simplified)"
+def generate_launch_description():
+    return LaunchDescription([
+        # Include the robot driver launch file
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource('path/to/robot_driver.launch.py')
+        ),
+        # Include the Nav2 launch file
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource('path/to/nav2_bringup.launch.py')
+        ),
+        # Launch your custom nodes
+        Node(package='my_package', executable='voice_command_node'),
+        Node(package='my_package', executable='command_parser_node'),
+        Node(package='my_package', executable='vla_recognizer_node'),
+    ])
+```
+
+## Testing and Debugging
+
+Debugging a complex, multi-node system is challenging.
+
+-   **Isolate and Test:** Test each node individually before running the whole system. Use command-line tools like `ros2 topic pub` to simulate inputs.
+-   **RViz2 is Your Best Friend:** Visualize everything you can: robot model, map, path, camera images, costmaps, etc.
+-   **`ros2 doctor`:** Use this tool to check for common issues in your ROS 2 graph.
+-   **Logging:** Add informative log messages (`self.get_logger().info(...)`) at key points in your code. Check the logs with `ros2 topic echo /rosout`.
+
+## Preparing for Demonstration
+
+When demonstrating your project, be prepared for things to go wrong.
+
+-   **Have a Script:** Plan out the exact steps of your demonstration.
+-   **Record a Video:** Have a video of a successful run as a backup in case the live demo fails.
+-   **Explain Your Work:** Be ready to explain the architecture of your system, the challenges you faced, and what you would do to improve it.
+
+## Final Project
+For your final project, you will:
+1. Complete the implementation of the "go-and-fetch" system.
+2. Deploy it on a real or simulated robot.
+3. Record a video of a successful demonstration.
+4. Write a brief report detailing your system design and results.
+
+Congratulations on completing this course on Physical AI and Humanoid Robotics!
+
+## Exercises
+
+1. Create the master launch file for the capstone project.
+2. Write a short "debugging guide" for your project, listing potential problems and how to solve them.
+3. Film your final project demonstration!
+
+## Beginner Exercises
+
+1.  The process of moving code onto the robot's on-board computer is called <span className="exercise-blank">deployment</span>.
+2.  A file that can start multiple other nodes and launch files is often called a <span className="exercise-blank">master launch file</span>.
+3.  A powerful visual tool for debugging in ROS 2 is <span className="exercise-blank">RViz2</span>.
+4.  The ROS 2 tool that can check for common problems in your system is <span className="exercise-blank">ros2 doctor</span>.

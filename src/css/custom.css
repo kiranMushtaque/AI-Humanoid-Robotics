@@ -1,0 +1,178 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+/* Main Theme Colors - Robotics/AI Feel */
+:root {
+  --ifm-color-primary: #667eea;
+  --ifm-color-primary-dark: #5a6fd8;
+  --ifm-color-primary-darker: #4d62c5;
+  --ifm-color-primary-darkest: #4354a3;
+  --ifm-color-primary-light: #7794ee;
+  --ifm-color-primary-lighter: #8fa9f1;
+  --ifm-color-primary-lightest: #a7bfff;
+
+  --ifm-font-family-base: 'Inter', sans-serif;
+  --ifm-font-family-heading: 'Poppins', sans-serif;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 700;
+}
+
+/* Dark Mode Adjustments */
+[data-theme='dark'] {
+  --ifm-color-primary: #7794ee;
+  --ifm-background-color: #1a202c;
+  --ifm-background-surface-color: #2d3748;
+}
+
+/* Beautiful Exercise Blanks */
+.exercise-blank {
+  display: inline-block;
+  min-width: 150px;
+  padding: 8px 16px;
+  margin: 0 10px;
+  background-color: #fffacd; /* Light yellow */
+  border: 2px dashed #f59e0b;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: monospace;
+  font-size: 1.1em;
+  color: #b45309;
+  text-align: center;
+  font-weight: bold;
+}
+
+[data-theme='dark'] .exercise-blank {
+  background-color: #4a4a30;
+  border-color: #f59e0b;
+  color: #fbbf24;
+}
+
+/* Urdu Mode - Full RTL + Nastaliq Font */
+.urdu-mode,
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+.urdu-mode body,
+.urdu-mode .markdown,
+.urdu-mode h1, .urdu-mode h2, .urdu-mode h3, .urdu-mode h4, .urdu-mode h5, .urdu-mode h6,
+.urdu-mode p, .urdu-mode li, .urdu-mode a, .urdu-mode button, .urdu-mode .navbar__link,
+.urdu-mode .menu__link, .urdu-mode .footer__link-item {
+  font-family: 'Noto Nastaliq Urdu', serif !important;
+  line-height: 2.2 !important;
+}
+
+/* Keep code blocks in English/monospace and LTR */
+.urdu-mode code,
+.urdu-mode pre,
+.urdu-mode .prism-code {
+  font-family: var(--ifm-font-family-monospace) !important;
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Navbar reverse in RTL */
+html[dir="rtl"] .navbar__items {
+  flex-direction: row-reverse;
+}
+
+/* Sidebar on right in RTL */
+html[dir="rtl"] .theme-doc-sidebar-container {
+  order: 2;
+  border-left: 1px solid var(--ifm-color-gray-200);
+  border-right: none;
+}
+
+[data-theme='dark'] html[dir="rtl"] .theme-doc-sidebar-container {
+  border-left: 1px solid var(--ifm-color-gray-700);
+}
+
+/* Modern Typography & Spacing */
+.markdown {
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ifm-font-family-heading);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ifm-color-primary), #764ba2);
+  border-radius: 2px;
+}
+
+html[dir="rtl"] h2::after {
+  left: unset;
+  right: 0;
+}
+
+/* Code Blocks */
+.prism-code {
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Footer Polish */
+.footer {
+  background: linear-gradient(to bottom, #1a202c, #10151a);
+  color: #cbd5e0;
+  padding: 4rem 0 2rem;
+}
+
+.footer__copyright {
+  font-size: 0.95rem;
+  color: #a0aec0;
+}
+
+/* Buttons & Cards */
+.button--primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+}
+/* Remove white background from inline code elements */
+code {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Dark mode fix */
+[data-theme='dark'] code {
+  background: transparent !important;
+}

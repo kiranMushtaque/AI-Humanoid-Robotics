@@ -1,0 +1,102 @@
+
+# Chapter 5: Simulating Robots - URDF, Gazebo, and Unity
+
+## Learning Objectives
+
+- Understand the purpose of URDF for robot modeling.
+- Learn how to create a simple robot model in URDF.
+- Simulate a URDF model in Gazebo and Unity.
+
+:::tip[Simple Explanation: Building a Virtual Robot]
+
+Before we build a real, physical robot, it's much cheaper and faster to build a virtual one on our computer. This is called **simulation**.
+
+-   **URDF is the Blueprint:** Think of a URDF file as the set of LEGO instructions for your robot. It describes every single piece:
+    -   `link`: A LEGO brick (the robot's body, a leg, an arm).
+    -   `joint`: How two bricks connect and move (like a hinge or a spinning axle).
+    -   It tells the computer exactly what your robot looks like and how its parts are put together.
+
+-   **Gazebo is the Play Area:** Gazebo is a virtual world where you can put your URDF robot. It understands physics, so your robot will fall over if it's not balanced, and it will bump into things. It's a safe place to test your code before trying it on a real, expensive robot.
+
+-   **Unity is a Hollywood-Level Play Area:** Unity is like Gazebo, but with movie-quality graphics. It's used to make beautiful video games, and now we can use it to create very realistic simulations for our robots.
+
+We build a blueprint (URDF), then test it in a virtual world (Gazebo or Unity) to make sure everything works.
+
+:::
+
+## URDF: Unified Robot Description Format
+
+URDF is an XML format used in ROS to describe all elements of a robot model. This includes:
+
+-   **Links:** The rigid parts of the robot (e.g., the body, a wheel).
+-   **Joints:** The connections between links, defining how they can move (e.g., `revolute`, `prismatic`).
+-   **Visuals:** The 3D geometry of the links.
+-   **Collisions:** The collision geometry used for physics simulation.
+
+```xml title="simple_robot.urdf"
+<robot name="simple_robot">
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.5 0.5 0.2"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.5 0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_to_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel"/>
+    <origin xyz="0 0.3 0" rpy="1.5707 0 0"/>
+  </joint>
+</robot>
+```
+
+## Simulating in Gazebo
+
+Gazebo is a powerful, open-source 3D robotics simulator. With the `ros_gz_sim` package, you can easily spawn a URDF model into a Gazebo world and control it with ROS 2.
+
+```bash
+# Launch a Gazebo world and spawn the robot
+ros2 launch ros_gz_sim gz_sim.launch.py gz_args:="-r empty.sdf"
+ros2 run ros_gz_sim create -file simple_robot.urdf -name simple_robot
+```
+
+## Overview of Unity for Robotics
+
+Unity is a popular game engine that is increasingly used for robotics simulation due to its high-fidelity graphics and physics. The [Unity Robotics Hub](https://github.com/Unity-Technologies/Unity-Robotics-Hub) provides packages for integrating with ROS 2.
+
+**Key Advantages of Unity:**
+-   Photorealistic rendering.
+-   Advanced physics engine.
+-   Large asset store and active community.
+
+## Exercises
+
+1.  Add a second wheel to the `simple_robot.urdf` model.
+2.  Launch the robot in Gazebo and try to move it by publishing to the `/cmd_vel` topic (you may need a differential drive controller).
+3.  Research and compare the pros and cons of using Gazebo vs. Unity for a robotics project.
+
+## Beginner Exercises
+
+1.  The "blueprint" file we use to describe a robot's structure is called a <span className="exercise-blank">URDF</span>.
+2.  In URDF, the rigid parts of the robot are called <span className="exercise-blank">links</span>.
+3.  The parts that connect links and define their movement are called <span className="exercise-blank">joints</span>.
+4.  A popular, open-source simulator for robotics is <span className="exercise-blank">Gazebo</span>.

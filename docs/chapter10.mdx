@@ -1,0 +1,108 @@
+
+# Chapter 10: Voice-to-Action with Whisper
+
+## Learning Objectives
+
+- Understand how to use OpenAI's Whisper for speech-to-text.
+- Create a ROS 2 node that listens for voice commands.
+- Parse text commands to trigger robot actions.
+
+:::tip[Simple Explanation: Giving Your Robot Ears]
+
+Wouldn't it be cool to just *talk* to your robot and have it follow your commands? That's what this chapter is about. We're giving our robot ears!
+
+-   **Whisper is the Robot's Ear:** **Whisper** is an amazing AI model from OpenAI (the creators of ChatGPT) that is incredibly good at converting spoken words into written text. This is called **Automatic Speech Recognition (ASR)**.
+
+-   **How It Works:**
+    1.  **Listen:** Our robot will use a microphone to listen to the sounds around it. We'll use a Python library called `sounddevice` to capture audio.
+    2.  **Transcribe:** We send that audio to the Whisper model. Whisper does its magic and "hears" the words, converting them into a text string like "robot, please go to the kitchen".
+    3.  **Publish:** Our ROS 2 "ear" node then publishes this text string to a topic, like `/voice_command`.
+    4.  **Understand and Act:** Another node, the "brain," subscribes to `/voice_command`. It looks for keywords in the text (like "go" or "stop") and triggers the appropriate robot action.
+
+So, instead of typing commands, we can just talk to our robot, and it will understand us.
+
+:::
+
+## Introduction to Whisper
+
+Whisper is a state-of-the-art automatic speech recognition (ASR) model developed by OpenAI. It can transcribe spoken language into text with high accuracy. We can use Whisper to create a natural language interface for our robot.
+
+There are several ways to use Whisper:
+-   **OpenAI API:** The easiest way, but requires an internet connection and an API key.
+-   **Local Installation:** Run Whisper directly on your machine (or the robot's computer). This is more suitable for real-time robotics applications. We will use this approach.
+
+```bash
+# Install Whisper
+pip install -U openai-whisper
+```
+
+## Creating a Voice Command Node
+
+This node will:
+1.  Use the `sounddevice` library to listen to the microphone.
+2.  Use Whisper to transcribe the audio into text.
+3.  Publish the transcribed text to a ROS 2 topic.
+
+```python title="voice_command_node.py"
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+import whisper
+import sounddevice as sd
+import numpy as np
+from scipy.io.wavfile import write
+
+class VoiceCommandNode(Node):
+    def __init__(self):
+        super().__init__('voice_command_node')
+        self.publisher_ = self.create_publisher(String, 'voice_command', 10)
+        self.model = whisper.load_model("base.en") # Choose a model size
+        self.get_logger().info('Voice command node is ready. Speak to issue commands.')
+        self.listen_for_command()
+
+    def listen_for_command(self):
+        # A simple implementation: record for 5 seconds
+        fs = 16000  # Sample rate
+        seconds = 5
+        myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=1, dtype='float32')
+        sd.wait()  # Wait until recording is finished
+        
+        # Transcribe
+        result = self.model.transcribe(myrecording.flatten())
+        command_text = result['text']
+        self.get_logger().info(f"Transcribed: {command_text}")
+        
+        # Publish the command
+        msg = String()
+        msg.data = command_text
+        self.publisher_.publish(msg)
+```
+
+## Parsing Commands
+
+Another node can subscribe to the `/voice_command` topic and parse the text to perform actions.
+
+```python
+# In another node's callback...
+def command_callback(self, msg):
+    text = msg.data.lower()
+    if "go forward" in text:
+        # Code to make the robot move forward
+        pass
+    elif "stop" in text:
+        # Code to stop the robot
+        pass
+```
+
+## Exercises
+
+1.  Improve the `voice_command_node.py` to use voice activity detection (VAD) instead of a fixed-length recording.
+2.  Create a "command parser" node that subscribes to the voice commands and can control the robot's movement in Gazebo.
+3.  Research and discuss the limitations of using a general-purpose ASR model like Whisper for robotics.
+
+## Beginner Exercises
+
+1.  The process of converting speech into text is called <span className="exercise-blank">Automatic Speech Recognition (ASR)</span>.
+2.  The AI model we are using for this is called <span className="exercise-blank">Whisper</span>.
+3.  We use the <span className="exercise-blank">sounddevice</span> library to capture audio from the microphone.
+4.  The voice command node <span className="exercise-blank">publishes</span> the transcribed text to a ROS 2 topic.

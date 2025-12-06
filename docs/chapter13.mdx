@@ -1,0 +1,93 @@
+
+# Chapter 13: Capstone Project Part 1 - System Integration
+
+## Learning Objectives
+
+- Define the goals and requirements for the final capstone project.
+- Design a system architecture that integrates all the components from previous chapters.
+- Begin the implementation of the integrated system.
+
+:::tip[Simple Explanation: Putting All the Pieces Together]
+
+This is it! The capstone project is where we connect all the individual skills we've learned to create one, complex, and intelligent robot behavior.
+
+-   **The Goal: A Robot Helper:** We want to build a robot that can act as a helpful assistant. You can give it a simple voice command like, "bring me the water bottle," and it will figure out how to do the rest.
+
+-   **Our "Team" of Nodes:** We've already built the specialist nodes for each part of this task. Think of it like assembling a team of experts:
+    -   The **Ear** (`voice_command_node`): Listens for your command.
+    -   The **Object Spotter** (`vla_recognizer_node`): The expert at visually finding things.
+    -   The **Navigator** (Nav2 stack): The expert at getting from point A to point B.
+    -   The **Arm Controller** (Manipulation): The expert at picking things up.
+
+-   **The "Manager" Node:** A team of experts needs a manager to tell them what to do and when. That's our new **`command_parser_node`**. Its job is to be the "brain" or **state machine** that directs the whole operation. It listens to the command and then tells the other nodes, one by one, what to do: "Okay Navigator, go to the kitchen. Now, Object Spotter, find the bottle. Now, Arm Controller, pick it up."
+
+This project is all about **System Integration**—making many small, smart programs work together to achieve a single, impressive goal.
+
+:::
+
+## Project Goal: Autonomous "Go-and-Fetch" Humanoid
+
+The goal of our capstone project is to enable a humanoid robot to perform a "go-and-fetch" task based on a voice command.
+
+**Task Description:**
+1.  The user gives a voice command, e.g., "Robot, please bring me the water bottle."
+2.  The robot understands the command and identifies the target object ("water bottle").
+3.  The robot autonomously navigates to the object's location.
+4.  The robot uses its perception system to locate the object precisely.
+5.  (Stretch Goal) The robot attempts to pick up the object.
+6.  The robot returns to the user.
+
+## System Architecture Design
+
+We need to create a system that connects all our previous work into a cohesive whole. A good way to manage this complexity is with a "master" node or a state machine.
+
+![System Architecture Diagram](https://via.placeholder.com/800x400.png?text=System+Architecture+Diagram)
+
+**Key Nodes:**
+-   **`voice_command_node` (Chapter 10):** Transcribes speech to text.
+-   **`command_parser_node`:**
+    -   Subscribes to `/voice_command`.
+    -   Extracts the target object and task (e.g., "fetch," "go to").
+    -   Acts as the main state machine.
+-   **`vla_recognizer_node` (Chapter 9):** Finds objects based on text queries.
+-   **`navigation_client`:** A node that sends goals to the Nav2 stack.
+-   **`manipulation_client`:** (Stretch Goal) A node that controls the robot's arms.
+
+## State Machine Logic
+
+The `command_parser_node` will manage the robot's state:
+
+1.  **`IDLE`:** Waiting for a command.
+2.  **`NAVIGATING_TO_OBJECT`:**
+    -   Gets an approximate location of the object (this could be pre-defined or from a VLA).
+    -   Sends a goal to Nav2.
+3.  **`SEARCHING_FOR_OBJECT`:**
+    -   Once near the location, uses the `vla_recognizer_node` to get a precise bounding box.
+4.  **`MANIPULATING`:**
+    -   (Stretch Goal) Executes the picking motion.
+5.  **`RETURNING_TO_USER`:**
+    -   Navigates back to the starting position.
+
+```python title="command_parser_node (simplified state logic)"
+def command_callback(self, msg):
+    # ... parse command ...
+    if self.state == 'IDLE':
+        if task == 'fetch':
+            self.state = 'NAVIGATING_TO_OBJECT'
+            # Get object location and send Nav2 goal
+    
+# ... other state transition logic ...
+```
+
+## Exercises
+
+1.  Flesh out the state machine diagram with more details for all possible states and transitions.
+2.  Create the `command_parser_node` and implement the `IDLE` state and the transition to `NAVIGATING_TO_OBJECT`.
+3.  How would you get the initial, approximate location of an object like "the kitchen table"? Discuss different strategies.
+
+## Beginner Exercises
+
+1.  The final project to build a helpful robot assistant is called the <span className="exercise-blank">capstone</span> project.
+2.  Connecting all the different ROS 2 nodes to work together is called <span className="exercise-blank">system integration</span>.
+3.  The "manager" node that controls the flow of the task is often implemented as a <span className="exercise-blank">state machine</span>.
+4.  In our project, the node that listens for voice commands is the <span className="exercise-blank">voice_command_node</span>.

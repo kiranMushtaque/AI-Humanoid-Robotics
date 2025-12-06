@@ -1,0 +1,82 @@
+
+# Chapter 12: Working with Real Robots - Unitree Humanoids
+
+## Learning Objectives
+
+- Get introduced to the Unitree series of humanoid robots.
+- Learn the basics of connecting to and controlling a Unitree robot with ROS 2.
+- Understand the critical safety protocols for working with real, powerful robots.
+
+:::tip[Simple Explanation: Bringing the Code to Life]
+
+This is the moment we've been working towards: taking all the code we've written and tested in simulation and running it on a **real, physical humanoid robot**.
+
+-   **Meet the Unitree H1:** The **Unitree H1** is a very advanced, powerful humanoid robot. Think of it as the real-world version of the robot we've been simulating. It has strong motors, a fast on-board computer (like the Jetson Orin we learned about), and a suite of advanced sensors.
+
+-   **The Big Difference: The Real World is Messy:** Simulation is clean and predictable. The real world is not.
+    -   The floor might be slippery.
+    -   The lighting changes.
+    -   The robot's own motors and sensors have slight imperfections.
+    -   This is the ultimate test of how robust our code is.
+
+-   **SAFETY IS EVERYTHING:** This is the most important part. A simulated robot can't hurt anyone. A real humanoid robot like the H1 is incredibly powerful and **can be very dangerous**. It is not a toy. We must treat it with extreme respect and follow safety rules religiously. An **Emergency Stop (E-Stop)** button is your best friend. It's the big red button that shuts everything down instantly if something goes wrong.
+
+Running code on a real robot is the most exciting and rewarding part of robotics, but it comes with a huge responsibility to be safe and careful.
+
+:::
+
+## Introduction to Unitree Robots
+
+Unitree Robotics is a company known for its advanced quadruped and humanoid robots. The Unitree H1 is one of the most advanced humanoid robots available for research and development. Working with such a robot is the ultimate goal of this course.
+
+**Key Features of Unitree H1:**
+-   **High-Performance Joints:** Powerful and fast-moving joints for dynamic locomotion.
+-   **Advanced Sensors:** Includes a 3D LiDAR, depth camera, and force sensors.
+-   **Onboard Computing:** Typically equipped with powerful onboard computers like the Jetson AGX Orin.
+-   **ROS 2 Support:** Unitree provides ROS 2 packages for controlling their robots.
+
+## Connecting and Controlling
+
+Unitree provides a ROS 2 SDK that exposes the robot's functionality through topics, services, and actions.
+
+1.  **Network Setup:** Connect your development computer to the robot's network (usually via Ethernet).
+2.  **Launch the Driver:** Unitree provides a launch file that starts the driver node on the robot.
+3.  **Control the Robot:** You can then use standard ROS 2 tools to control the robot.
+
+```bash
+# Example: Make the robot stand up
+ros2 action send_goal /high_level/stand_up unitree_msgs/action/StandUp "{}"
+```
+
+```python
+# Example: Walking with velocity commands
+# (Similar to controlling a simulated robot)
+twist_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+twist_msg = Twist()
+twist_msg.linear.x = 0.5  # Move forward at 0.5 m/s
+twist_pub.publish(twist_msg)
+```
+
+## CRITICAL SAFETY PROTOCOLS
+
+Working with a powerful humanoid robot is not a game. The H1 is strong enough to cause serious injury or damage.
+
+-   **Always Have an E-Stop:** Have a physical or software-based emergency stop button readily accessible at all times.
+-   **Start Slow:** When testing new code, start with very low speeds and torques.
+-   **Clear the Area:** Ensure the robot has a large, clear space to operate in, free of obstacles and people.
+-   **Use a Harness:** For dynamic walking experiments, consider using an overhead safety harness to prevent falls.
+-   **Never Work Alone:** Always have a second person present who knows how to stop the robot.
+-   **Respect the Robot:** Be aware of the robot's state and never assume it will behave as expected.
+
+## Exercises
+
+1.  Watch videos of the Unitree H1 in action. What are some of the challenges you anticipate in controlling such a dynamic robot?
+2.  Read the documentation for the Unitree ROS 2 SDK. What are some of the available topics and services?
+3.  Create a "safety checklist" that you would go through before turning on a real humanoid robot.
+
+## Beginner Exercises
+
+1.  The real-world humanoid robot we are discussing is the <span className="exercise-blank">Unitree H1</span>.
+2.  The most important consideration when working with a real, powerful robot is <span className="exercise-blank">safety</span>.
+3.  A button that can shut down the robot instantly in an emergency is called an <span className="exercise-blank">E-Stop</span>.
+4.  To control the robot, Unitree provides a <span className="exercise-blank">ROS 2 SDK</span>.

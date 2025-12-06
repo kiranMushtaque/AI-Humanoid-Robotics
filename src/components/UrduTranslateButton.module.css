@@ -1,0 +1,19 @@
+.urduToggleButton {
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ifm-button-border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  margin-left: 10px; /* Adjust as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px; /* Ensure consistent width */
+}
+
+.urduToggleButton:hover {
+  background-color: var(--ifm-color-primary-dark);
+}

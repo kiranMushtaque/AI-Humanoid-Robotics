@@ -1,0 +1,76 @@
+
+# Chapter 2: Setting Up Your Development Environment
+
+## Learning Objectives
+
+- Install Ubuntu and ROS 2 for robotics development.
+- Get familiar with essential Linux command-line tools.
+- Understand the hardware recommendations for this course.
+
+:::tip[Simple Explanation]
+
+Think of setting up your computer for robotics like preparing a kitchen to cook a new kind of food.
+
+1.  **Operating System (Ubuntu):** This is like the kitchen itself. Ubuntu is a version of Linux, which is a very popular and powerful "kitchen" for developers, especially in robotics. ROS 2 works best in this kitchen.
+
+2.  **Robot Operating System (ROS 2):** This isn't really an operating system, but a set of tools and libraries, like a collection of special pots, pans, and utensils designed for cooking up robot behaviors. It gives you ready-made components so you don't have to start from scratch.
+
+3.  **Command-Line:** This is how you give direct instructions to your computer, like a chef calling out orders. It's a very powerful way to control your environment.
+
+We're getting the kitchen ready so we can start "cooking" our robot code!
+
+:::
+
+## OS Installation: Ubuntu
+
+For robotics development, the recommended operating system is **Ubuntu**, as it has the best support for ROS 2. We will be using **Ubuntu 22.04 LTS**.
+
+1.  **Download Ubuntu:** Get the official ISO from the Ubuntu website.
+2.  **Create a Bootable USB:** Use a tool like Rufus or BalenaEtcher.
+3.  **Install Ubuntu:** Follow the on-screen instructions. A dual-boot setup with Windows is common.
+
+## Installing ROS 2
+
+ROS (Robot Operating System) is an open-source framework for writing robot software. We will use **ROS 2 Humble Hawksbill**.
+
+```bash title="Install ROS 2 Humble"
+# Set locale
+sudo apt update && sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Add the ROS 2 repository
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+sudo apt update && sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+# Install ROS 2 packages
+sudo apt update
+sudo apt upgrade
+sudo apt install ros-humble-desktop
+
+# Source the setup file
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Hardware Recommendations
+
+-   **Development PC:** A modern computer with an **NVIDIA RTX GPU** (e.g., RTX 3060 or higher) is highly recommended for running simulations and training models.
+-   **Deployment Target:** For deploying code on a real robot, we recommend an embedded system like the **NVIDIA Jetson Orin**.
+
+## Exercises
+
+1.  Verify your ROS 2 installation by running `ros2 doctor`. What is the output?
+2.  Create a new directory called `ros2_ws` (workspace) in your home folder.
+3.  Practice the following basic Linux commands and describe what they do: `ls -la`, `cd ..`, `pwd`, `mkdir test_dir`, `rm -r test_dir`.
+
+## Beginner Exercises
+
+1.  The operating system we are using for this book is <span className="exercise-blank">Ubuntu 22.04</span>.
+2.  ROS stands for <span className="exercise-blank">Robot Operating System</span>.
+3.  The command to see the contents of your current directory is <span className="exercise-blank">ls</span>.
+4.  To create a new directory, you use the command <span className="exercise-blank">mkdir</span>.

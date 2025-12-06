@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js dependencies
+node_modules/
+
+# Vercel deployment files
+.vercel/
+
+# Docusaurus build files
+.docusaurus/
+build/

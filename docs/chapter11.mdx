@@ -1,0 +1,75 @@
+
+# Chapter 11: Hardware Integration - Jetson Orin
+
+## Learning Objectives
+
+- Understand the role of embedded systems like the Jetson Orin in robotics.
+- Learn the basics of setting up a Jetson Orin for a robotics project.
+- Understand performance considerations for deploying ROS 2 nodes on embedded hardware.
+
+:::tip[Simple Explanation: The Robot's On-Board Brain]
+
+So far, we've been running our robot's "brain" (our ROS 2 code) on a big, powerful desktop or laptop computer. But a real, mobile robot can't be tethered to a desk! It needs its own small, powerful, on-board computer. This is where an **embedded system** comes in.
+
+-   **What is a Jetson Orin?** The **NVIDIA Jetson Orin** is like a tiny, super-powered computer designed specifically to be the brain of a robot.
+    -   It's small enough to fit inside the robot's body.
+    -   It's very power-efficient, so it can run on batteries for a long time.
+    -   It has a powerful **GPU** (Graphics Processing Unit), which is like a specialized brain for running AI and computer vision tasks very, very fast.
+
+-   **What is JetPack?** Setting up a Jetson isn't like setting up a normal computer. You use a special software package from NVIDIA called **JetPack**. Think of it as an all-in-one installer that sets up the operating system (Ubuntu) and all the special NVIDIA software (like CUDA and TensorRT) that makes the AI run fast.
+
+-   **Deploying Code:** Getting your code onto the Jetson is called "deploying." You can either compile it directly on the Jetson (which can be slow) or "cross-compile" it on your fast desktop PC, which is like packaging a meal perfectly so it's ready to eat on the go.
+
+The Jetson Orin is the hardware that lets our robot "cut the cord" and think for itself out in the real world.
+
+:::
+
+## What is the Jetson Orin?
+
+The NVIDIA Jetson Orin is a family of powerful, compact, and energy-efficient AI computers designed for robotics and other edge AI applications. They are ideal for running the "brain" of a robot, processing sensor data and running AI models locally without relying on a cloud connection.
+
+**Key Advantages:**
+-   **Powerful GPU:** The integrated Ampere architecture GPU accelerates AI inference and computer vision tasks.
+-   **Energy Efficient:** Designed for battery-powered applications.
+-   **Compact Size:** Easy to integrate into a robot's chassis.
+
+## Setting Up the Jetson Orin
+
+1.  **Flash the OS:** Download the NVIDIA JetPack SDK and flash it to a microSD card. JetPack includes the Ubuntu OS, CUDA, cuDNN, and TensorRT, all optimized for the Jetson platform.
+2.  **Install ROS 2:** The process is similar to installing on a desktop, but you may need to compile some packages from source if pre-built binaries are not available for the ARM64 architecture.
+3.  **Power and Cooling:** Ensure you have an adequate power supply and a cooling solution (like a fan) as the Orin can generate significant heat under load.
+
+## Deploying ROS 2 Nodes
+
+Deploying nodes to the Jetson is typically done by:
+-   **Cross-compilation:** Compiling your code on a powerful desktop PC for the Jetson's ARM architecture.
+-   **Native Compilation:** Compiling the code directly on the Jetson. This is slower but simpler for smaller projects.
+
+```bash
+# On the Jetson, clone your repository into a ROS 2 workspace
+cd ~/ros2_ws/src
+git clone https://your-repo-url.com/my_robot.git
+cd ..
+
+# Build the workspace
+colcon build --symlink-install
+```
+
+## Performance Considerations
+
+-   **Model Optimization:** Use NVIDIA TensorRT to optimize your AI models for the Jetson GPU. This can lead to significant performance improvements.
+-   **Node Placement:** Decide which nodes should run on the Jetson (e.g., perception, control) and which can run on a separate computer (e.g., high-level planning, UI).
+-   **Power Management:** Use the `nvpmodel` tool to select a power profile that balances performance and energy consumption.
+
+## Exercises
+
+1.  If you have a Jetson Orin, go through the setup process and install ROS 2.
+2.  Compile and run one of the simple publisher/subscriber nodes from a previous chapter on the Jetson.
+3.  Research the differences between the various Jetson Orin models (e.g., Nano, AGX). Which one would be most suitable for a humanoid robot and why?
+
+## Beginner Exercises
+
+1.  A small, on-board computer for a robot is often called an <span className="exercise-blank">embedded system</span>.
+2.  The NVIDIA computer we are using, which is designed for robotics, is the <span className="exercise-blank">Jetson Orin</span>.
+3.  The special software from NVIDIA used to set up the Jetson is called <span className="exercise-blank">JetPack</span>.
+4.  The part of the Jetson that is specialized for running AI tasks quickly is the <span className="exercise-blank">GPU</span>.
