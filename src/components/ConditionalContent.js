@@ -11,8 +11,11 @@ export default function ConditionalContent({ children, for: userType, type }) {
 
   useEffect(() => {
     // Get the user's background from localStorage
-    const background = localStorage.getItem('user_background');
-    setUserBackground(background);
+    const user = localStorage.getItem('user');
+    if (user) {
+      const { background } = JSON.parse(user);
+      setUserBackground(background);
+    }
   }, []);
 
   if (!userBackground || userBackground !== userType) {
