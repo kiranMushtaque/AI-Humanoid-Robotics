@@ -67,7 +67,26 @@
     color: white;
 }
 
+
+
 .skipButton {
+
     background-color: #f0f0f0;
+
     color: #333;
+
+}
+
+
+
+.disclaimer {
+
+    font-size: 0.8rem;
+
+    color: #666;
+
+    font-style: italic;
+
+    margin-top: 1rem;
+
 }

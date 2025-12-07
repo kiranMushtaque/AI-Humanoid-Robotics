@@ -13,6 +13,7 @@ const config = {
   stylesheets: [
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap",
     "https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css",
   ],
 
   // Set the production url of your site here
@@ -36,6 +37,15 @@ const config = {
     defaultLocale: "en",
     locales: ["en"],
   },
+
+  plugins: [
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+      },
+    ],
+  ],
 
   presets: [
     [
@@ -65,7 +75,6 @@ const config = {
       image: "img/docusaurus-social-card.jpg",
       navbar: {
         title: "AI & Humanoid Robotics",
-
         items: [
           {
             type: "docSidebar",
@@ -79,10 +88,8 @@ const config = {
             position: "right",
           },
           {
-            href: '#',
-            label: 'Signup',
+            type: 'search',
             position: 'right',
-            className: 'navbar-signup-button',
           },
         ],
       },
@@ -90,44 +97,33 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Content",
-            items: [
-              {
-                label: "Book Chapters",
-                to: "/docs/intro", // Link to the main intro of the book
-              },
-              // Potentially add more chapter links here if desired, e.g.,
-              // { label: 'Chapter 1', to: '/docs/chapter1' },
-            ],
-          },
-          {
-            title: "About the Author",
-            items: [
-              {
-                label: "Kiran Mushtaque", // This could link to an author page if one existed
-                href: "https://kiranmushtaque.com", // Placeholder, replace with actual author website/portfolio if available
-              },
-              {
-                label: "Email",
-                href: "mailto:your.email@example.com", // Replace with Kiran's actual email
-              },
-            ],
-          },
-          {
             title: "Connect",
             items: [
               {
-                label: "GitHub",
-                href: "https://github.com/kiranMushtaque",
+                html: `
+                  <a href="https://github.com/kiranMushtaque" target="_blank" rel="noopener noreferrer" class="footer__link-item">
+                    <i class="fa-brands fa-github"></i> GitHub
+                  </a>
+                `,
               },
               {
-                label: "LinkedIn",
-                href: "https://www.linkedin.com/in/kiran-m-9b238b2b6/",
+                html: `
+                  <a href="https://www.linkedin.com/in/kiran-m-9b238b2b6/" target="_blank" rel="noopener noreferrer" class="footer__link-item">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                  </a>
+                `,
+              },
+              {
+                html: `
+                  <a href="https://twitter.com/KiranMushtaque" target="_blank" rel="noopener noreferrer" class="footer__link-item">
+                    <i class="fa-brands fa-twitter"></i> Twitter
+                  </a>
+                `,
               },
             ],
           },
         ],
-        copyright: `Copyright © 2025 Kiran Mushtaque. AI & Humanoid Robotics Textbook.`,
+        copyright: `Created by Kiran Mushtaque. Copyright © 2025.`,
       },
       prism: {
         theme: lightCodeTheme,
