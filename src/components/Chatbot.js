@@ -118,6 +118,21 @@ export default function Chatbot() {
   const [language, setLanguage] = useState("EN");
   const [isLoading, setIsLoading] = useState(false);
 
+  const botMessageStyle = {
+    padding: "10px 16px",
+    borderRadius: "18px",
+    background: "#f1f5f9",
+    color: "#333",
+    whiteSpace: "pre-wrap", // To respect newlines from the backend
+  };
+
+  const botErrorStyle = {
+    ...botMessageStyle,
+    background: "#fef2f2",
+    color: "#ef4444",
+    border: "1px solid #fecaca",
+  };
+
   const handleSelection = () => {
     const selected = window.getSelection().toString().trim();
     if (selected) {
@@ -250,12 +265,18 @@ export default function Chatbot() {
                 }}
               >
                 <div
-                  style={{
-                    padding: "10px 16px",
-                    borderRadius: "18px",
-                    background: msg.sender === "user" ? "#667eea" : "#f1f5f9",
-                    color: msg.sender === "user" ? "white" : "#333",
-                  }}
+                  style={
+                    msg.sender === 'user'
+                      ? {
+                          padding: '10px 16px',
+                          borderRadius: '18px',
+                          background: '#667eea',
+                          color: 'white',
+                        }
+                      : (msg.text.startsWith('Error:') || msg.text.startsWith('Chatbot Error:'))
+                      ? botErrorStyle
+                      : botMessageStyle
+                  }
                 >
                   {msg.text}
                 </div>

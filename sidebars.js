@@ -17,26 +17,36 @@ const sidebars = {
 
   // But you can create a sidebar manually
   tutorialSidebar: [
-    'intro',
+    'intro', // Keep the intro page at the top
     {
       type: 'category',
-      label: 'Book',
-      items: [
-        'chapter1',
-        'chapter2',
-        'chapter3',
-        'chapter4',
-        'chapter5',
-        'chapter6',
-        'chapter7',
-        'chapter8',
-        'chapter9',
-        'chapter10',
-        'chapter11',
-        'chapter12',
-        'chapter13',
-        'chapter14',
-      ],
+      label: 'Module 1: Introduction & Setup',
+      items: ['chapter1', 'chapter2'],
+    },
+    {
+      type: 'category',
+      label: 'Module 2: ROS 2 Core',
+      items: ['chapter3', 'chapter4'],
+    },
+    {
+      type: 'category',
+      label: 'Module 3: Simulation',
+      items: ['chapter5', 'chapter6'],
+    },
+    {
+      type: 'category',
+      label: 'Module 4: Navigation & Perception',
+      items: ['chapter7', 'chapter8', 'chapter9'],
+    },
+    {
+      type: 'category',
+      label: 'Module 5: Voice & Hardware',
+      items: ['chapter10', 'chapter11', 'chapter12'],
+    },
+    {
+      type: 'category',
+      label: 'Module 6: Capstone Project',
+      items: ['chapter13', 'chapter14'],
     },
   ],
 };

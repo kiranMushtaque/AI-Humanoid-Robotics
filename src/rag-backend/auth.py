@@ -23,7 +23,10 @@ Base.metadata.create_all(bind=engine)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    # Truncate password to 72 bytes, as bcrypt has a limitation for longer passwords.
+    # It's important to note this limitation and potentially inform the user on the frontend.
+    truncated_password = password.encode('utf-8')[:72].decode('utf-8', 'ignore')
+    return pwd_context.hash(truncated_password)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)

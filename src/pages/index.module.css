@@ -678,3 +678,16 @@ body {
     font-size: 2rem;
   }
 }
+/* Welcome Banner */
+.welcomeBanner {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary); /* Use a primary color for emphasis */
+  margin-bottom: 1rem;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

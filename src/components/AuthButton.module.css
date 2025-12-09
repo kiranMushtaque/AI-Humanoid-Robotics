@@ -1,0 +1,49 @@
+/* src/components/AuthButton.module.css */
+.authButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.loginButton {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+}
+
+.loginButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.logoutButton {
+  background-color: transparent;
+  color: var(--ifm-font-color-base);
+  border-color: #d1d5db;
+}
+
+.logoutButton:hover {
+  background-color: var(--ifm-hover-overlay);
+  border-color: #9ca3af;
+}
+
+.welcomeMessage {
+  font-weight: 500;
+  color: var(--ifm-font-color-base);
+  display: none; /* Hidden on small screens */
+}
+
+@media (min-width: 768px) {
+  .welcomeMessage {
+    display: block; /* Shown on larger screens */
+  }
+}

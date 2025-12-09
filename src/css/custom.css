@@ -194,3 +194,49 @@ code {
     font-size: 1.75rem;
   }
 }
+/* Footer Custom Styles */
+.footer-custom-content {
+  text-align: center;
+  padding: 2rem 0;
+  color: white; /* Ensure text is white */
+}
+
+.footer-custom-content p {
+  margin-bottom: 0.5rem;
+}
+
+.footer-created-by {
+  font-size: 1.1rem;
+  margin-bottom: 1rem !important; /* Override default p margin */
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; /* Space between icons */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.social-icon {
+  width: 30px; /* Adjust size as needed */
+  height: 30px;
+  filter: brightness(0) invert(1); /* Makes SVG white */
+  transition: filter 0.3s ease;
+}
+
+.social-icons a:hover .social-icon {
+  filter: brightness(0) saturate(100%) invert(49%) sepia(87%) saturate(1478%) hue-rotate(200deg) brightness(97%) contrast(100%); /* Hover blue color */
+}
+
+.footer-small-text {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: 1rem !important; /* Space above small text */
+}
+
+/* Ensure the default Docusaurus footer styling doesn't interfere, if present */
+.footer {
+  background-color: var(--ifm-color-emphasis-1000); /* Darkest background */
+  color: white;
+}

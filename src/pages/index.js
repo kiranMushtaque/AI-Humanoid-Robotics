@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react"; // Combined imports
+import { ModalContext } from "../context/ModalContext"; // Add ModalContext import
 import clsx from "clsx";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
@@ -395,6 +396,7 @@ function RobotSVG() {
 // Modern Hero Section
 function HeroSection() {
   const { siteConfig } = useDocusaurusContext();
+  const { user } = useContext(ModalContext); // Get user from context
   const [currentWord, setCurrentWord] = useState(0);
   const words = ["Innovate", "Build", "Automate", "Create"];
 
@@ -415,6 +417,9 @@ function HeroSection() {
       <div className="container">
         <div className={styles.heroContent}>
           <div className={styles.heroLeft}>
+            {user && ( // Conditionally render welcome banner
+              <p className={styles.welcomeBanner}>Welcome, {user.name}!</p>
+            )}
             <h1 className={styles.heroTitle}>
               Master <span className={styles.heroTitleAccent}>Humanoid</span>{" "}
               Robotics

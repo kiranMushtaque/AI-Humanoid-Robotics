@@ -43,6 +43,10 @@ const config = {
       "@easyops-cn/docusaurus-search-local",
       {
         hashed: true,
+        indexDocs: true,
+        indexPages: true,
+        docsRouteBasePath: "/docs",
+        language: "en",
       },
     ],
   ],
@@ -81,6 +85,10 @@ const config = {
             sidebarId: "tutorialSidebar",
             position: "left",
             label: "Book",
+          },
+          {
+            type: 'custom-authButton',
+            position: 'right',
           },
           {
             href: "https://github.com/your-repo/ai-robotics-Book",

@@ -132,7 +132,13 @@ def signin(user_login: UserLogin, db: Session = Depends(get_db)):
     user = authenticate_user(db, user_login.email, user_login.password)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect email or password")
-    return {"message": "Logged in successfully", "redirect_url": f"/welcome/{user.email}"}
+    return {
+        "message": "Logged in successfully",
+        "user": {
+            "email": user.email,
+            "background": user.background,
+        }
+    }
 
 @app.post("/signup")
 def signup(user: UserCreate, db: Session = Depends(get_db)):
@@ -141,6 +147,10 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     create_user(db=db, email=user.email, password=user.password, background=user.background)
     return {"message": "User created successfully"}
+
+@app.post("/logout")
+def logout():
+    return {"message": "Logged out successfully"}
 
 @app.post("/search")
 async def search(search_query: SearchQuery):
@@ -170,7 +180,13 @@ async def search(search_query: SearchQuery):
         logger.info(f"Found {len(search_result)} results from Qdrant.")
     except Exception as e:
         logger.error(f"Qdrant query_points failed: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Failed to search for context in database.")
+        error_message = str(e).lower()
+        if "not found" in error_message or "not exist" in error_message:
+            detail = "Chatbot Error: The book content has not been indexed. Please run the `python ingest.py` script in the `src/rag-backend` directory to set up the database."
+            raise HTTPException(status_code=500, detail=detail)
+        else:
+            detail = f"Failed to search for context in database. Please check your Qdrant connection and ensure the server is running."
+            raise HTTPException(status_code=500, detail=detail)
 
     # 3. Construct context from the search results
     context_parts = []
